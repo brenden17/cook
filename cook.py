@@ -29,12 +29,12 @@ def init_data():
 
 def analysis_by_naivebayes(fileaname, sep=',', msg='raw'):
     rawdata = pd.read_csv(get_fullpath(fileaname), sep=sep)
-    
+
     y = np.array(rawdata['category'])
     vectorizer = CountVectorizer(max_df=10, min_df=1)
     X = vectorizer.fit_transform(np.array(rawdata['receipt word']))
     # X = TfidfTransformer().fit_transform(X)
-    
+
     nb = MultinomialNB()
     nb.fit(X, y)
     print('Navie Bayes metric {} ================================='.format(msg))
@@ -46,17 +46,17 @@ def analysis_by_naivebayes(fileaname, sep=',', msg='raw'):
 
 def analysis_by_kmeans(fileaname, sep=',', tfidf=True, msg='raw'):
     rawdata = pd.read_csv(get_fullpath(fileaname), sep=sep)
-    
+
     y = np.array(rawdata['category'])
     vectorizer = CountVectorizer(max_df=10, min_df=1)
     X = vectorizer.fit_transform(np.array(rawdata['receipt word']))
     if tfidf:
         X = TfidfTransformer().fit_transform(X)
         print(X)
-    
+
     kmeans = KMeans()
     kmeans.fit(X)
-    
+
     print('KMeans metric {} ================================='.format(msg))
     print('homogeneity {}'.format(metrics.homogeneity_score(y, kmeans.labels_)))
     print('completeness {}'.format(metrics.completeness_score(y, kmeans.labels_)))
@@ -92,6 +92,6 @@ if __name__ == '__main__':
     # analysis_by_kmeans('data/raw_all.csv', tfidf=False, msg='tfidf=false raw')
     # analysis_by_kmeans('data/all.tsv', sep='\t', tfidf=True, msg='tfidf=true processed')
     # analysis_by_kmeans('data/all.tsv', sep='\t', tfidf=False, msg='tfidf=false processed')
-    
+
     # analysis_by_nmf()
 
